@@ -143,7 +143,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
     section { scroll-margin-top: 88px; }
     .icon { display: block; flex: 0 0 auto; }
 
-    .site-header { position: sticky; top: 0; z-index: 60; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 90%, transparent); box-shadow: 0 4px 24px rgba(var(--shadow-rgb), 0.05); backdrop-filter: blur(16px); transition: transform 0.35s ease, box-shadow 0.35s ease; }
+    .site-header { position: fixed; top: 0; right: 0; left: 0; z-index: 60; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 90%, transparent); box-shadow: 0 4px 24px rgba(var(--shadow-rgb), 0.05); backdrop-filter: blur(16px); transition: transform 0.35s ease, box-shadow 0.35s ease; }
     .site-header--hidden { transform: translateY(-120%); }
     .site-header-inner { width: min(100% - 32px, var(--content-width)); min-height: 76px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; }
     .brand-link { display: inline-flex; align-items: center; min-width: 0; text-decoration: none; }
@@ -167,10 +167,15 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
     .site-header-mobile[open] .menu-toggle .icon--menu { display: none; }
     .site-header-mobile[open] .menu-toggle .icon--close { display: block; }
 
-    .hero { position: relative; min-height: min(720px, 78vh); padding: 120px 20px; display: grid; place-items: center; overflow: hidden; isolation: isolate; background: linear-gradient(145deg, color-mix(in srgb, var(--primary) 8%, var(--surface)), var(--surface-muted) 70%); background-size: cover; background-position: center; }
+    .hero { position: relative; min-height: calc(min(720px, 78vh) + var(--header-offset)); padding: 120px 20px; display: grid; place-items: center; overflow: hidden; isolation: isolate; background: linear-gradient(145deg, color-mix(in srgb, var(--primary) 8%, var(--surface)), var(--surface-muted) 70%); background-size: cover; background-position: center; }
     .hero::after { position: absolute; width: 420px; height: 420px; right: -160px; bottom: -240px; border-radius: 50%; background: color-mix(in srgb, var(--primary) 16%, transparent); content: ""; filter: blur(4px); z-index: -1; }
     .hero-has-image::before { position: absolute; inset: 0; background: linear-gradient(115deg, color-mix(in srgb, var(--primary) 28%, rgba(0,0,0,0.84)), color-mix(in srgb, var(--primary) 24%, rgba(0,0,0,0.48))); content: ""; z-index: 0; }
     .hero-curtain { display: none; }
+    /* El header flota sobre el hero: el hero arranca en el borde superior y reserva el alto del header
+       con un borde transparente (su fondo y su capa de color también cubren esa franja). */
+    html { --header-offset: 76px; }
+    .hero { border-top: var(--header-offset) solid transparent; background-origin: border-box; }
+    .hero-has-image::before, .hero-curtain { top: calc(-1 * var(--header-offset)); }
     .hero-content { position: relative; z-index: 1; width: min(100%, 800px); margin: 0 auto; text-align: center; }
     .hero-content h1 { margin: 0 0 20px; color: inherit; font-size: clamp(36px, 6vw, 68px); letter-spacing: -0.035em; }
     .hero-subtitle { max-width: 680px; margin: 0 auto 30px; color: var(--text-muted); font-size: clamp(17px, 2vw, 21px); line-height: 1.7; }
@@ -309,7 +314,8 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
     .cart-fab { position: fixed; right: 20px; bottom: 104px; z-index: 41; min-height: 52px; padding: 0 18px; display: inline-flex; gap: 8px; align-items: center; border: 2px solid var(--surface-elevated); border-radius: 999px; background: var(--primary); box-shadow: var(--shadow-md); color: var(--on-primary); font-weight: 800; cursor: pointer; }
     .cart-fab[hidden] { display: none; }
     .cart-fab-count { min-width: 26px; height: 26px; padding: 0 7px; display: grid; place-items: center; border-radius: 999px; background: var(--on-primary); color: var(--primary); font-size: 13px; }
-    .cart-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    /* Aviso para lectores de pantalla: anclado arriba y sin márgenes para no alargar la página bajo el footer. */
+    .cart-status { position: absolute; top: 0; left: 0; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
     .cart-panel { width: min(100%, 440px); height: 100%; max-width: 100%; max-height: 100%; margin: 0 0 0 auto; padding: 0; border: 0; background: var(--surface-elevated); box-shadow: var(--shadow-md); color: var(--text); }
     .cart-panel::backdrop { background: rgba(15,23,42,0.62); }
     .cart-panel-inner { height: 100%; display: flex; flex-direction: column; }
@@ -339,7 +345,8 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
       .product-modal[data-media="icon"] .product-modal-media { padding: 28px; }
     }
 
-    footer { padding: 52px 0 34px; background: var(--footer-surface); color: var(--on-footer-muted); }
+    /* Espacio inferior para que los botones flotantes no tapen el final del footer. */
+    footer { padding: 52px 0 128px; background: var(--footer-surface); color: var(--on-footer-muted); }
     .footer-inner { width: min(100% - 40px, var(--content-width)); margin: 0 auto; }
     .footer-top { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
     footer .logo-text { color: var(--on-footer); }
@@ -369,7 +376,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
       .site-header-mobile[open] > .site-header-panel--mobile { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
       .site-nav { width: 100%; flex-direction: column; gap: 4px; }
       .site-nav a { width: 100%; min-height: 46px; }
-      .hero { min-height: 620px; padding: 96px 20px; }
+      .hero { min-height: calc(620px + var(--header-offset)); padding: 96px 20px; }
       .skin-comercio-local .grid-items,
       .skin-restaurante .grid-items,
       .skin-servicios-locales .grid-items { grid-template-columns: 1fr; }
@@ -455,7 +462,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
     }
 
     .style-cercano .hero {
-      min-height: min(780px, calc(100vh - 82px));
+      min-height: min(calc(780px + var(--header-offset)), 100vh);
       padding: 128px max(24px, calc((100vw - var(--content-width)) / 2));
       place-items: center start;
       background-color: var(--surface-muted);
@@ -681,8 +688,8 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
     @media (max-width: 767px) {
       .style-cercano .site-header-panel--mobile { border: 2px solid var(--text); border-radius: 22px 22px 6px 22px; box-shadow: 5px 6px 0 var(--text); }
       .style-cercano .site-nav { gap: 2px; }
-      .style-cercano .hero { min-height: 700px; padding: 106px 26px; background-position: 60% center; }
-      .style-cercano.skin-tienda-catalogo .hero { min-height: calc(100svh - 82px); padding: 78px 18px 70px; }
+      .style-cercano .hero { min-height: calc(700px + var(--header-offset)); padding: 106px 26px; background-position: 60% center; }
+      .style-cercano.skin-tienda-catalogo .hero { min-height: 100svh; padding: 78px 18px 70px; }
       .style-cercano .hero-content { padding: 30px 24px; border-radius: 30px 30px 30px 8px; box-shadow: 8px 9px 0 var(--secondary); }
       .style-cercano.skin-tienda-catalogo .hero-content { padding: 26px 20px; }
       .style-cercano .hero-content::before { top: -32px; right: 16px; }
@@ -764,6 +771,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
       .style-cercano .gallery-item:hover img { transform: none; }
     }
   </style>
+  
 </head>
 <body class="skin-tienda-catalogo style-cercano" data-skin="tienda_catalogo" data-plan="profesional" data-visual-style="cercano" data-product-shape="redondeada" data-map-shape="suave" data-carousel-shape="organica" data-testimonial-layout="rejilla" data-animation-intensity="equilibrada">
   <header class="site-header">
@@ -775,8 +783,8 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
           <a href="#inicio">Inicio</a>
             <a href="#promociones">Promociones</a>
             <a href="#catalogo">Catálogo</a>
-            <a href="#galeria">Destacado</a>
-            <a href="#contacto">Horarios</a>
+            <a href="#galeria">Galería</a>
+            <a href="#contacto">Ubicación</a>
         </nav>
         
       </div>
@@ -791,8 +799,8 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
             <a href="#inicio">Inicio</a>
             <a href="#promociones">Promociones</a>
             <a href="#catalogo">Catálogo</a>
-            <a href="#galeria">Destacado</a>
-            <a href="#contacto">Horarios</a>
+            <a href="#galeria">Galería</a>
+            <a href="#contacto">Ubicación</a>
           </nav>
           
         </div>
@@ -811,7 +819,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
       </a>
     </div>
   </section>
-  <section class="promo" id="promociones" data-reveal style="background-color: #f8e9d8; background-image: none;">
+  <section class="promo" id="promociones" data-reveal style="background-color: #f8e9d8; background-image: none; --section-foreground: #000000;">
     <h2>Tu idea, lista para regalar</h2>
     <div class="promo-carousel">
       <div class="promo-track"><figure class="promo-slide is-active" aria-hidden="false">
@@ -822,7 +830,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
     </div>
   </section>
   <main>
-    <section class="catalogo" id="catalogo" data-reveal style="background-color: #fff9ef; background-image: none;">
+    <section class="catalogo" id="catalogo" data-reveal style="background-color: #fff9ef; background-image: none; --section-foreground: #000000;">
       <h2>Estampados y sublimados</h2>
       <div class="grid-items" data-stagger><article class="card product-card" data-product-id="p1" data-product-name="Camiseta personalizada a todo color" data-product-description="Elige una imagen, frase o diseño y crea una camiseta estampada para regalar o llevar a tu manera." data-product-price="COP$45.000" data-product-price-value="45000" data-product-price-currency="COP" data-product-media="photo" data-animate-item>
           <div class="product-media">
@@ -890,7 +898,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
           <button type="button" class="product-detail-trigger" data-product-open aria-haspopup="dialog">Ver detalle de Cojín decorativo con foto o frase</button>
         </article></div>
     </section>
-    <section class="gallery" id="galeria" data-reveal style="background-color: #eaf3ee; background-image: none;">
+    <section class="gallery" id="galeria" data-reveal style="background-color: #eaf3ee; background-image: none; --section-foreground: #000000;">
       <h2>Ideas personalizadas para cada día</h2>
       <div class="gallery-grid" data-stagger><figure class="gallery-item" data-animate-item>
           <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Camisetas personalizadas para regalar" loading="lazy" />
@@ -911,7 +919,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
     </section>
     
   </main>
-  <section class="horarios-ubicacion" id="contacto" data-reveal style="background-color: #eef3e9; background-image: none;">
+  <section class="horarios-ubicacion" id="contacto" data-reveal style="background-color: #eef3e9; background-image: none; --section-foreground: #000000;">
     <div class="horarios-content">
       <h2>Pedidos y atención</h2>
       <div class="contact-meta">
@@ -921,7 +929,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
       <iframe class="maps-embed" src="https://www.google.com/maps?q=Atenci%C3%B3n%20por%20WhatsApp%3B%20direcci%C3%B3n%20por%20confirmar.&amp;output=embed" title="Ubicación en Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </section>
-  <footer style="background-color: #293b38; background-image: none;">
+  <footer style="background-color: #293b38; background-image: none; --section-foreground: #ffffff;">
     <div class="footer-inner">
       <div class="footer-top" data-reveal>
         <a class="brand-link" href="#inicio" aria-label="Ir al inicio"><img class="logo" src="https://ui-avatars.com/api/?name=EV&amp;background=d34d3d&amp;color=fff9ef&amp;size=128&amp;bold=true" alt="Estampa Viva" /></a>
@@ -929,8 +937,8 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
           <a href="#inicio">Inicio</a>
             <a href="#promociones">Promociones</a>
             <a href="#catalogo">Catálogo</a>
-            <a href="#galeria">Destacado</a>
-            <a href="#contacto">Horarios</a>
+            <a href="#galeria">Galería</a>
+            <a href="#contacto">Ubicación</a>
         </nav>
       </div>
       
@@ -997,6 +1005,12 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
       const initHeader = () => {
         const header = document.querySelector('.site-header');
         if (!header) return;
+
+        // El hero reserva exactamente el alto real del header (varía según el estilo y el ancho).
+        const syncHeaderOffset = () => document.documentElement.style.setProperty('--header-offset', header.offsetHeight + 'px');
+        syncHeaderOffset();
+        if (window.ResizeObserver) new ResizeObserver(syncHeaderOffset).observe(header);
+        else window.addEventListener('resize', syncHeaderOffset, { passive: true });
 
         const threshold = 80;
         const delta = 8;
@@ -1154,9 +1168,50 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
         });
       };
 
+      // Cierra un diálogo esperando su animación de salida, si el estilo define una para .is-closing.
+      const closeDialog = (dialog, onClosed) => {
+        if (!dialog.hasAttribute('open') || dialog.classList.contains('is-closing')) return;
+        let done = false;
+        const finish = () => {
+          if (done) return;
+          done = true;
+          delete dialog.finishPendingClose;
+          dialog.removeEventListener('animationend', onEnd);
+          dialog.classList.remove('is-closing');
+          if (typeof dialog.close === 'function') dialog.close();
+          else dialog.removeAttribute('open');
+          if (onClosed) onClosed();
+        };
+        const onEnd = (event) => {
+          if (event.target === dialog) finish();
+        };
+        // Si se vuelve a abrir mientras sale, el cierre pendiente se completa antes de abrir.
+        dialog.finishPendingClose = finish;
+        dialog.classList.add('is-closing');
+        const animation = window.getComputedStyle(dialog).animationName;
+        if (!animation || animation === 'none') {
+          finish();
+          return;
+        }
+        dialog.addEventListener('animationend', onEnd);
+        window.setTimeout(finish, 800);
+      };
+      const openDialog = (dialog) => {
+        if (dialog.finishPendingClose) dialog.finishPendingClose();
+        if (dialog.hasAttribute('open')) return;
+        if (typeof dialog.showModal === 'function') dialog.showModal();
+        else dialog.setAttribute('open', '');
+      };
+      // La tecla Escape también cierra con la animación de salida.
+      const animateEscape = (dialog) => dialog.addEventListener('cancel', (event) => {
+        event.preventDefault();
+        closeDialog(dialog);
+      });
+
       const initProductDetails = () => {
         const modal = document.querySelector('[data-product-modal]');
         if (!modal) return;
+        animateEscape(modal);
         const media = modal.querySelector('[data-product-modal-media]');
         const fields = {
           name: modal.querySelector('[data-product-modal-name]'),
@@ -1168,12 +1223,9 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
           element.textContent = value || '';
           element.hidden = !value;
         };
-        const close = () => {
-          if (!modal.hasAttribute('open')) return;
-          if (typeof modal.close === 'function') modal.close();
-          else modal.removeAttribute('open');
-        };
+        const close = () => closeDialog(modal);
         const open = (card) => {
+          if (modal.finishPendingClose) modal.finishPendingClose();
           const data = card.dataset;
           fields.name.textContent = data.productName || '';
           setField(fields.category, data.productCategory);
@@ -1192,8 +1244,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
           modal.dataset.productId = data.productId;
           // Otras funciones (p. ej. el carrito) actualizan sus controles con el producto abierto.
           modal.dispatchEvent(new CustomEvent('product-detail:open', { detail: { card } }));
-          if (typeof modal.showModal === 'function') modal.showModal();
-          else modal.setAttribute('open', '');
+          openDialog(modal);
         };
 
         document.querySelectorAll('[data-product-id]').forEach((card) => {
@@ -1318,11 +1369,14 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
           const target = sameControl || (neighbour && neighbour.querySelector('[data-cart-action="' + action + '"]'));
           if (target) target.focus();
         };
+        let previousCount = null;
+        let highlightId = null;
         const render = () => {
-          list.replaceChildren(...items.map((item) => {
+          list.replaceChildren(...items.map((item, index) => {
             const product = products.get(item.id);
             const row = document.createElement('li');
-            row.className = 'cart-item';
+            row.className = item.id === highlightId ? 'cart-item cart-item--new' : 'cart-item';
+            row.style.setProperty('--i', String(index));
             const info = document.createElement('div');
             const name = document.createElement('p');
             name.className = 'cart-item-name';
@@ -1361,23 +1415,32 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
           fab.hidden = count === 0;
           fab.querySelector('[data-cart-count]').textContent = String(count);
           fab.setAttribute('aria-label', 'Ver pedido, ' + count + (count === 1 ? ' producto' : ' productos'));
+          // Pequeño salto del botón del pedido cada vez que aumenta la cantidad.
+          if (previousCount !== null && count > previousCount) {
+            fab.classList.remove('is-bumped');
+            void fab.offsetWidth;
+            fab.classList.add('is-bumped');
+          }
+          previousCount = count;
+          highlightId = null;
           if (count === 0 && panel.open) {
-            closePanel();
             // El botón del pedido se oculta al quedar vacío: el foco pasa al primer producto visible del catálogo.
             const firstProduct = Array.from(document.querySelectorAll('[data-product-open]'))
               .find((button) => button.getClientRects().length > 0);
-            if (firstProduct) firstProduct.focus();
+            closePanel(() => {
+              if (firstProduct) firstProduct.focus();
+            });
           }
           save();
         };
         const openPanel = () => {
-          if (typeof panel.showModal === 'function') panel.showModal();
-          else panel.setAttribute('open', '');
+          // Los productos entran escalonados solo al abrir el panel, no en cada cambio de cantidad.
+          panel.classList.add('is-opening');
+          window.setTimeout(() => panel.classList.remove('is-opening'), 1200);
+          openDialog(panel);
         };
-        const closePanel = () => {
-          if (typeof panel.close === 'function') panel.close();
-          else panel.removeAttribute('open');
-        };
+        const closePanel = (onClosed) => closeDialog(panel, onClosed);
+        animateEscape(panel);
 
         let modalQuantity = 1;
         const updateModalQuantity = (value) => {
@@ -1390,22 +1453,24 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
           step.addEventListener('click', () => updateModalQuantity(modalQuantity + Number(step.dataset.cartQuantityStep)));
         });
         modal.querySelector('[data-cart-add]').addEventListener('click', () => {
+          // Mientras el detalle anima su salida, un segundo clic no debe volver a sumar al pedido.
+          if (modal.classList.contains('is-closing')) return;
           const id = modal.dataset.productId;
           const product = products.get(id);
           if (!product) return;
           const existing = items.find((item) => item.id === id);
+          highlightId = id;
           if (existing) setQuantity(id, existing.quantity + modalQuantity);
           else {
             items = [...items, { id, quantity: modalQuantity }];
             render();
           }
-          if (typeof modal.close === 'function') modal.close();
-          else modal.removeAttribute('open');
+          closeDialog(modal);
           announce('Agregado al pedido: ' + modalQuantity + ' × ' + product.name + '.');
         });
 
         fab.addEventListener('click', openPanel);
-        panel.querySelector('[data-cart-close]').addEventListener('click', closePanel);
+        panel.querySelector('[data-cart-close]').addEventListener('click', () => closePanel());
         panel.addEventListener('click', (event) => {
           if (event.target === panel) closePanel();
         });
@@ -1437,6 +1502,96 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
         });
 
         render();
+      };
+
+      // Minimalista editorial en pantallas táctiles: sin cursor, la foto recupera su color cuando la tarjeta
+      // llega al centro de la vista. No depende de las animaciones, así que también funciona con movimiento reducido.
+      const initPhotoColor = () => {
+        const body = document.body;
+        if (!body.hasAttribute('data-editorial') || body.dataset.visualStyle !== 'minimalista') return;
+        if (!('IntersectionObserver' in window) || !window.matchMedia('(hover: none)').matches) return;
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => entry.target.classList.toggle('is-colored', entry.isIntersecting));
+        }, { rootMargin: '-30% 0px -30% 0px' });
+        document.querySelectorAll('.gallery-item, .promo-slide, .producto-card, .product-card, .dish-card').forEach((item) => observer.observe(item));
+      };
+
+      // Cercano editorial: cintas de color y marca de agua del logo como adornos de fondo (decorativos, ocultos
+      // para lectores de pantalla). Se crean siempre; si hay movimiento, las cintas se dibujan al bajar.
+      // Cada cinta entra y sale por fuera de su sección (que la recorta), así nunca quedan extremos sueltos.
+      const RIBBONS = [
+        { selector: '.hero', from: [0.62, -0.12], to: [1.12, 1.1], amplitude: 0.11, waves: 1.25 },
+        { selector: '.promo', from: [-0.12, 0.2], to: [0.42, 1.14], amplitude: 0.09, waves: 1.1 },
+        { selector: '.testimonios', from: [0.76, -0.14], to: [1.14, 0.78], amplitude: 0.07, waves: 1 },
+        { selector: '.horarios-ubicacion', from: [-0.12, 0.58], to: [0.52, 1.14], amplitude: 0.06, waves: 0.9 }
+      ];
+      const RIBBON_SEGMENTS = 5;
+      // Onda que avanza de un punto a otro de la sección (coordenadas relativas), partida en tramos de colores.
+      // Se calcula en píxeles reales de la sección para que el grosor y los tramos no se deformen.
+      const ribbonPaths = (config, width, height) => {
+        const steps = 150;
+        const dx = (config.to[0] - config.from[0]) * width;
+        const dy = (config.to[1] - config.from[1]) * height;
+        const length = Math.hypot(dx, dy) || 1;
+        const amplitude = config.amplitude * Math.min(width, height) * 1.2;
+        const points = [];
+        for (let index = 0; index <= steps; index += 1) {
+          const t = index / steps;
+          // Onda principal con un armónico suave para que el trazo se sienta orgánico y fluido.
+          const phase = t * config.waves * Math.PI * 2;
+          const offset = (Math.sin(phase) + 0.28 * Math.sin(phase * 2.1 + 1)) * amplitude;
+          points.push([config.from[0] * width + dx * t - (dy / length) * offset, config.from[1] * height + dy * t + (dx / length) * offset]);
+        }
+        const size = Math.ceil(steps / RIBBON_SEGMENTS);
+        const paths = [];
+        for (let start = 0; start < steps; start += size) {
+          // Los tramos se solapan un poco para que los colores empalmen sin cortes.
+          const chunk = points.slice(start, Math.min(start + size, steps) + 3);
+          paths.push('M' + chunk.map((point) => point[0].toFixed(1) + ' ' + point[1].toFixed(1)).join(' L'));
+        }
+        return paths;
+      };
+      const initCercanoDecor = () => {
+        const body = document.body;
+        if (!body.hasAttribute('data-editorial') || body.dataset.visualStyle !== 'cercano') return;
+        const svgNs = 'http://www.w3.org/2000/svg';
+        RIBBONS.forEach((config) => {
+          const section = document.querySelector(config.selector);
+          if (!section) return;
+          const svg = document.createElementNS(svgNs, 'svg');
+          svg.setAttribute('class', 'cercano-ribbon');
+          svg.setAttribute('aria-hidden', 'true');
+          svg.setAttribute('focusable', 'false');
+          const paths = Array.from({ length: RIBBON_SEGMENTS }, () => {
+            const path = document.createElementNS(svgNs, 'path');
+            path.setAttribute('pathLength', '1');
+            svg.appendChild(path);
+            return path;
+          });
+          // Los tramos se recalculan si la sección cambia de tamaño; los elementos se conservan para las animaciones.
+          const draw = () => {
+            const width = Math.max(1, svg.getBoundingClientRect().width || section.offsetWidth);
+            const height = Math.max(1, section.offsetHeight);
+            svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+            ribbonPaths(config, width, height).forEach((d, index) => paths[index] && paths[index].setAttribute('d', d));
+          };
+          section.prepend(svg);
+          draw();
+          if ('ResizeObserver' in window) new ResizeObserver(draw).observe(section);
+          window.addEventListener('resize', draw, { passive: true });
+        });
+        // El logo del negocio (marca.logo) reaparece muy tenue en el fondo y gira al bajar.
+        const logo = document.querySelector('.site-header img.logo');
+        const host = document.querySelector('.testimonios') || document.querySelector('.catalogo');
+        if (logo && host) {
+          const mark = document.createElement('img');
+          mark.className = 'cercano-logo-mark';
+          mark.src = logo.currentSrc || logo.src;
+          mark.alt = '';
+          mark.setAttribute('aria-hidden', 'true');
+          mark.loading = 'lazy';
+          host.appendChild(mark);
+        }
       };
 
       const initAnimations = () => {
@@ -1474,7 +1629,194 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
           });
         };
 
-        if (style === 'elegante') {
+        // Movimiento editorial del rediseño: se activa cuando la skin tiene su capa editorial (data-editorial).
+        // Los selectores son comunes a todas las skins; los componentes propios se animan desde su capa.
+        const editorialMotion = document.body.hasAttribute('data-editorial') && ['minimalista', 'elegante', 'cercano'].includes(style);
+        const animateEditorial = () => {
+          const minimal = style === 'minimalista';
+          const onEnter = (trigger, start = 'top 86%') => ({ trigger, start, once: true });
+          // Inclinación de reposo definida en CSS (--tilt) para volver a ella al terminar cada animación.
+          const restingTilt = (index, target) => window.getComputedStyle(target).getPropertyValue('--tilt').trim() || 0;
+
+          // Hero: cortinilla y título que se descubre (minimalista) o telón crema con la caligrafía (elegante).
+          if (minimal) {
+            gsap.fromTo('.hero', { clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.15, ease: 'expo.inOut', clearProps: 'clipPath' });
+            gsap.fromTo('.hero-content h1',
+              { clipPath: 'inset(0% 0% 100% 0%)', y: 90 * motionScale },
+              { clipPath: 'inset(0% 0% 0% 0%)', y: 0, duration: 1.3, delay: 0.55, ease: 'power4.out', clearProps: 'clipPath,transform' }
+            );
+            gsap.fromTo('[data-animate-hero] > :not(h1):not(.cta)',
+              { autoAlpha: 0, y: 24 },
+              { autoAlpha: 1, y: 0, duration: 0.8, delay: 1.05, stagger: 0.08, ease: 'power3.out', clearProps: 'transform,opacity,visibility' }
+            );
+          } else {
+            const curtain = document.querySelector('.hero-curtain');
+            if (curtain) {
+              gsap.set(curtain, { display: 'block', autoAlpha: 1, scaleX: 1 });
+              gsap.to(curtain, { scaleX: 0, duration: 1.5 * motionScale, delay: 0.05, ease: 'power4.inOut', onComplete: () => gsap.set(curtain, { display: 'none' }) });
+            }
+            gsap.fromTo('.hero-eyebrow',
+              { autoAlpha: 0, y: 40, rotation: -3 },
+              { autoAlpha: 1, y: 0, rotation: 0, duration: 1.4, delay: 0.75, ease: 'power3.out', clearProps: 'transform,opacity,visibility' }
+            );
+            gsap.fromTo('[data-animate-hero] > :not(.hero-eyebrow):not(.cta)',
+              { autoAlpha: 0, y: 36 },
+              { autoAlpha: 1, y: 0, duration: 1.1, delay: 1, stagger: 0.12, ease: 'power3.out', clearProps: 'transform,opacity,visibility' }
+            );
+          }
+          gsap.fromTo('[data-animate-hero] > .cta',
+            { y: minimal ? 24 : 36 },
+            { y: 0, duration: 1, delay: minimal ? 1.3 : 1.36, ease: 'power3.out', clearProps: 'transform' }
+          );
+          gsap.to('.hero', {
+            backgroundPosition: 'center 65%',
+            ease: 'none',
+            scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 }
+          });
+
+          // Títulos: se descubren de abajo arriba (minimalista) o se "escriben" de izquierda a derecha (elegante).
+          gsap.utils.toArray('section > h2, .horarios-content > h2').forEach((heading) => {
+            gsap.fromTo(heading,
+              minimal ? { clipPath: 'inset(0% 0% 100% 0%)', y: 48 } : { clipPath: 'inset(0% 100% 0% 0%)' },
+              { clipPath: 'inset(0% 0% 0% 0%)', y: 0, duration: minimal ? 1.05 : 1.7, ease: minimal ? 'power4.out' : 'power2.inOut', clearProps: 'clipPath,transform', scrollTrigger: onEnter(heading, 'top 88%') }
+            );
+          });
+          gsap.utils.toArray('section h3').forEach((heading) => {
+            gsap.fromTo(heading, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', clearProps: 'transform,opacity', scrollTrigger: onEnter(heading) });
+          });
+
+          // Tarjetas del catálogo y galería: cortinilla sobre la foto (minimalista) o polaroids que caen girando (elegante).
+          // Se anima la opacidad y no la visibilidad para que los botones de detalle sigan siendo enfocables.
+          const batchItems = (selector) => {
+            window.ScrollTrigger.batch(selector, {
+              start: 'top 90%',
+              once: true,
+              onEnter: (batch) => {
+                if (minimal) {
+                  gsap.fromTo(batch, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.1, ease: 'power3.out', clearProps: 'transform,opacity' });
+                  batch.forEach((item) => {
+                    const media = item.querySelector('.dish-media, .product-media') || item;
+                    gsap.fromTo(media, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.2, ease: 'expo.out', clearProps: 'clipPath' });
+                    const image = item.querySelector('img');
+                    if (image) gsap.fromTo(image, { scale: 1.25 }, { scale: 1, duration: 1.6, ease: 'expo.out', clearProps: 'transform' });
+                  });
+                } else {
+                  gsap.fromTo(batch,
+                    { opacity: 0, y: -70 * motionScale, rotation: (index) => (index % 2 === 0 ? -9 : 9) * motionScale },
+                    { opacity: 1, y: 0, rotation: restingTilt, duration: 1.1, stagger: 0.12, ease: 'back.out(1.5)', clearProps: 'transform,opacity' }
+                  );
+                }
+              }
+            });
+          };
+          batchItems('.grid-items > .card');
+          batchItems('.gallery-item');
+
+          // Piezas propias de algunas skins (credibilidad, certificaciones, historia): entrada escalonada suave.
+          window.ScrollTrigger.batch('.credibility-badge, .certification-card, .about-text', {
+            start: 'top 92%',
+            once: true,
+            onEnter: (batch) => gsap.fromTo(batch, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.09, ease: 'power3.out', clearProps: 'transform,opacity' })
+          });
+
+          // Promoción, reservas y mapa: solo movimiento, sin ocultar sus controles mientras entran.
+          gsap.utils.toArray('.promo-carousel, .reservation-widget, .maps-embed').forEach((element) => {
+            const restingRotation = minimal ? 0
+              : element.classList.contains('promo-carousel') ? -1.2
+              : element.classList.contains('maps-embed') ? -0.8 : 0;
+            gsap.fromTo(element,
+              minimal ? { y: 80 * motionScale } : { y: 70 * motionScale, rotation: 4 },
+              { y: 0, rotation: restingRotation, duration: minimal ? 1.2 : 1.3, ease: minimal ? 'expo.out' : 'power3.out', clearProps: 'transform', scrollTrigger: onEnter(element, 'top 84%') }
+            );
+          });
+
+          // Testimonios y datos de contacto
+          const testimonials = document.querySelector('.testimonios-grid');
+          if (testimonials) {
+            gsap.fromTo('.testimonio',
+              { opacity: 0, y: 50 },
+              { opacity: 1, y: 0, duration: 0.95, stagger: 0.12, ease: 'power3.out', clearProps: 'transform,opacity', scrollTrigger: onEnter(testimonials) }
+            );
+          }
+          gsap.fromTo('.contact-meta-item',
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out', clearProps: 'transform,opacity', scrollTrigger: onEnter('.horarios-ubicacion', 'top 80%') }
+          );
+        };
+
+        // Movimiento del estilo cercano: entradas suaves con un leve rebote, portada que se diluye al bajar,
+        // cintas que se dibujan con el scroll y manchas del fondo que flotan (--drift).
+        const animateCercano = () => {
+          const onEnter = (trigger, start = 'top 86%') => ({ trigger, start, once: true });
+          const soft = 'power3.out';
+          const hero = document.querySelector('.hero');
+          gsap.fromTo('.hero-content', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 1.1, delay: 0.2, ease: 'back.out(1.4)', clearProps: 'opacity' });
+          gsap.fromTo('[data-animate-hero] > *', { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.45, stagger: 0.08, ease: soft, clearProps: 'transform,opacity' });
+          if (hero) {
+            const leaving = { trigger: hero, start: 'top top', end: 'bottom top', scrub: true };
+            gsap.fromTo(hero, { '--hero-dissolve': 0 }, { '--hero-dissolve': 0.92, ease: 'none', scrollTrigger: leaving });
+            gsap.to('.hero-content', { y: -70 * motionScale, ease: 'none', scrollTrigger: leaving });
+            gsap.to(hero, { backgroundPosition: 'center 70%', ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: 1 } });
+          }
+
+          document.querySelectorAll('.cercano-ribbon').forEach((ribbon) => {
+            const paths = ribbon.querySelectorAll('path');
+            const section = ribbon.parentElement;
+            if (section === hero) {
+              gsap.fromTo(paths, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.42, stagger: 0.42, delay: 0.5, ease: 'none' });
+              gsap.to(ribbon, { yPercent: -10, ease: 'none', scrollTrigger: { trigger: section, start: 'top top', end: 'bottom top', scrub: true } });
+              return;
+            }
+            const drawing = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top 85%', end: 'bottom 40%', scrub: 1.2 } });
+            paths.forEach((path) => drawing.fromTo(path, { strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: 'none' }));
+          });
+          gsap.utils.toArray('.catalogo, .testimonios, .gallery').forEach((section) => {
+            gsap.fromTo(section, { '--drift': -50 }, { '--drift': 50, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true } });
+          });
+
+          gsap.utils.toArray('section > h2, .horarios-content > h2').forEach((heading) => {
+            gsap.fromTo(heading, { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.9, ease: soft, clearProps: 'transform,opacity', scrollTrigger: onEnter(heading, 'top 88%') });
+          });
+          gsap.utils.toArray('section h3').forEach((heading) => {
+            gsap.fromTo(heading, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.8, ease: soft, clearProps: 'transform,opacity', scrollTrigger: onEnter(heading) });
+          });
+
+          // Tarjetas y galería: suben con un pequeño rebote; las fotos de la galería se enderezan al llegar.
+          // Se anima la opacidad y no la visibilidad para que los botones de detalle sigan siendo enfocables.
+          window.ScrollTrigger.batch('.grid-items > .card', {
+            start: 'top 90%',
+            once: true,
+            onEnter: (batch) => gsap.fromTo(batch, { opacity: 0, y: 50, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.95, stagger: 0.1, ease: 'back.out(1.3)', clearProps: 'transform,opacity' })
+          });
+          window.ScrollTrigger.batch('.gallery-item', {
+            start: 'top 90%',
+            once: true,
+            onEnter: (batch) => gsap.fromTo(batch,
+              { opacity: 0, y: 40, rotation: (index) => (index % 2 === 0 ? -3 : 3) },
+              { opacity: 1, y: 0, rotation: 0, duration: 1, stagger: 0.1, ease: 'back.out(1.4)', clearProps: 'transform,opacity' }
+            )
+          });
+          window.ScrollTrigger.batch('.credibility-badge, .certification-card, .about-text', {
+            start: 'top 92%',
+            once: true,
+            onEnter: (batch) => gsap.fromTo(batch, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.09, ease: soft, clearProps: 'transform,opacity' })
+          });
+
+          // Promoción, reservas y mapa: solo movimiento, sin ocultar sus controles mientras entran.
+          gsap.utils.toArray('.promo-carousel, .reservation-widget, .maps-embed, .horarios-content').forEach((element) => {
+            gsap.fromTo(element, { y: 60 * motionScale }, { y: 0, duration: 1.1, ease: soft, clearProps: 'transform', scrollTrigger: onEnter(element, 'top 88%') });
+          });
+          const testimonials = document.querySelector('.testimonios-grid');
+          if (testimonials) {
+            gsap.fromTo('.testimonio', { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.12, ease: 'back.out(1.2)', clearProps: 'transform,opacity', scrollTrigger: onEnter(testimonials) });
+          }
+          gsap.fromTo('.contact-meta-item', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.08, ease: soft, clearProps: 'transform,opacity', scrollTrigger: onEnter('.horarios-ubicacion', 'top 80%') });
+        };
+
+        if (editorialMotion) {
+          if (style === 'cercano') animateCercano();
+          else animateEditorial();
+        } else if (style === 'elegante') {
           const curtain = document.querySelector('.hero-curtain');
           if (curtain) {
             gsap.set(curtain, { display: 'block', autoAlpha: 1, scaleX: 1 });
@@ -1518,21 +1860,22 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
 
           const productGrid = document.querySelector('.grid-items');
           if (productGrid) {
+            // Solo opacidad (no visibilidad): el botón de detalle de cada tarjeta sigue siendo enfocable con teclado.
             gsap.fromTo('.grid-items > .card',
               {
-                autoAlpha: 0,
+                opacity: 0,
                 y: 78 * motionScale,
                 rotateY: 6 * motionScale,
                 transformPerspective: 900
               },
               {
-                autoAlpha: 1,
+                opacity: 1,
                 y: 0,
                 rotateY: 0,
                 duration: 1.05,
                 stagger: 0.12,
                 ease: 'power4.out',
-                clearProps: 'transform,opacity,visibility',
+                clearProps: 'transform,opacity',
                 scrollTrigger: { trigger: productGrid, start: 'top 82%', once: true }
               }
             );
@@ -1762,12 +2105,14 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
 
           const productGrid = document.querySelector('.grid-items');
           if (productGrid) {
+            // Solo opacidad (no visibilidad): el botón de detalle de cada tarjeta sigue siendo enfocable con teclado.
             gsap.from('.grid-items > .card', {
-              autoAlpha: 0,
+              opacity: 0,
               y: 48 * motionScale,
               duration: 0.85,
               stagger: 0.08,
               ease: 'power3.out',
+              clearProps: 'opacity',
               scrollTrigger: { trigger: productGrid, start: 'top 84%', once: true }
             });
             gsap.from('.grid-items > .card .product-media', {
@@ -1834,7 +2179,7 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
           gsap.set('.hero', { clearProps: 'clipPath,filter' });
           gsap.set('.hero-curtain', { display: 'none', clearProps: 'transform,opacity,visibility' });
           gsap.set('.floating-btn', { clearProps: 'transform,opacity,visibility' });
-        }, style === 'elegante' ? 2500 : 1900);
+        }, editorialMotion ? 3200 : style === 'elegante' ? 2500 : 1900);
       };
 
       ready(() => {
@@ -1844,6 +2189,8 @@ Esta evaluación documenta el uso técnico actual. Cualquier cambio que conviert
         initMenuFilters();
         initProductDetails();
         initCart();
+        initPhotoColor();
+        initCercanoDecor();
         initAnimations();
       });
     })();
